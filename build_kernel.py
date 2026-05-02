@@ -134,6 +134,9 @@ def main():
     
     make_common = ['make', 'O=out', 'LLVM=1', f'-j{os.cpu_count()}'] + COMMON_FLAGS
     
+    # Set KCONFIG_EXT_PREFIX to find vendor defconfig files
+    os.environ['KCONFIG_EXT_PREFIX'] = 'arch/arm64/configs/vendor/'
+    
     # Prepare config fragments
     config_fragments = ['arch/arm64/configs/vendor/grass.config', f'arch/arm64/configs/vendor/{args.target}.config']
     if not args.no_ksu:
