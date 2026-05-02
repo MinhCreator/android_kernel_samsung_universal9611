@@ -135,11 +135,11 @@ def main():
     make_defconfig = []
     make_common = ['make', 'O=out', 'LLVM=1', f'-j{os.cpu_count()}'] + COMMON_FLAGS
     make_defconfig += make_common 
-    defconfigs = [f'{args.target}_defconfig', 'grass.config', f'{args.target}.config']
+    defconfigs = [f'{args.target}_defconfig', 'arch/arm64/configs/vendor/grass.config', f'arch/arm64/configs/vendor/{args.target}.config']
     if not args.no_ksu:
-        defconfigs.append('ksu.config')
+        defconfigs.append('arch/arm64/configs/vendor/ksu.config')
     if args.aosp:
-        defconfigs.append('aosp.config')
+        defconfigs.append('arch/arm64/configs/vendor/aosp.config')
     defconfigs = ['vendor/' + i for i in defconfigs]
     make_defconfig += defconfigs
     
