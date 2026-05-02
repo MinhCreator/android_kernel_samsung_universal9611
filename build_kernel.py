@@ -132,20 +132,26 @@ def main():
         print('Make clean...')
         shutil.rmtree(outDir)
     
-    make_defconfig = []
     make_common = ['make', 'O=out', 'LLVM=1', f'-j{os.cpu_count()}'] + COMMON_FLAGS
-    make_defconfig += make_common 
-    defconfigs = [f'{args.target}_defconfig', 'arch/arm64/configs/vendor/grass.config', f'arch/arm64/configs/vendor/{args.target}.config']
+    
+    # Prepare config fragments
+    config_fragments = ['arch/arm64/configs/vendor/grass.config', f'arch/arm64/configs/vendor/{args.target}.config']
     if not args.no_ksu:
-        defconfigs.append('arch/arm64/configs/vendor/ksu.config')
+        config_fragments.append('arch/arm64/configs/vendor/ksu.config')
     if args.aosp:
-        defconfigs.append('arch/arm64/configs/vendor/aosp.config')
-    defconfigs = [defconf for defconf in defconfigs]
-    make_defconfig += defconfigs
+        config_fragments.append('arch/arm64/configs/vendor/aosp.config')
     
     t = datetime.now()
     print('Make defconfig...')
+    # First, generate the base defconfig
+    make_defconfig = make_common + [f'{args.target}_defconfig']
     popen_impl(make_defconfig)
+    
+    # Then merge additional config fragments if any
+    if config_fragments:
+        print('Merging config fragments...')
+        merge_cmd = ['./scripts/kconfig/merge_config.sh', '-m', '-O', 'out'] + config_fragments
+        popen_impl(merge_cmd)
     print('Make kernel...')
     popen_impl(make_common)
     print('Done')
