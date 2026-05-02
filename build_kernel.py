@@ -100,7 +100,7 @@ def main():
         return
     
     # Define COMMON_FLAGS
-    COMMON_FLAGS = ['CROSS_COMPILE=aarch64-linux-gnu-', 'CC=clang', 'LD=ld.lld', 'AS=llvm-as', 'AR=llvm-ar', 'OBJDUMP=llvm-objdump', 'READELF=llvm-readelf', 'NM=llvm-nm', 'OBJCOPY=llvm-objcopy', f'-j{os.cpu_count()}']
+    COMMON_FLAGS = ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', 'CC=clang', 'LD=ld.lld', 'AS=llvm-as', 'AR=llvm-ar', 'OBJDUMP=llvm-objdump', 'READELF=llvm-readelf', 'NM=llvm-nm', 'OBJCOPY=llvm-objcopy', f'-j{os.cpu_count()}']
  
     # Check files
     if not check_file("AnyKernel3/version"):
@@ -140,7 +140,7 @@ def main():
         defconfigs.append('ksu.config')
     if args.aosp:
         defconfigs.append('aosp.config')
-    defconfigs = ['arch/arm64/configs/vendor/' + i for i in defconfigs]
+    defconfigs = ['vendor/' + i for i in defconfigs]
     make_defconfig += defconfigs
     
     t = datetime.now()
