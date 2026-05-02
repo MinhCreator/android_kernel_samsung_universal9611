@@ -140,7 +140,7 @@ def main():
         defconfigs.append('ksu.config')
     if args.aosp:
         defconfigs.append('aosp.config')
-    defconfigs = ['vendor/' + i for i in defconfigs]
+    defconfigs = ['arch/arm64/configs/vendor/' + i for i in defconfigs]
     make_defconfig += defconfigs
     
     t = datetime.now()
