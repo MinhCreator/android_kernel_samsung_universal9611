@@ -100,7 +100,7 @@ def main():
         return
     
     # Define COMMON_FLAGS
-    COMMON_FLAGS = ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', 'CC=clang', 'LD=ld.lld', 'AS=llvm-as', 'AR=llvm-ar', 'OBJDUMP=llvm-objdump', 'READELF=llvm-readelf', 'NM=llvm-nm', 'OBJCOPY=llvm-objcopy', f'-j{os.cpu_count()}']
+    COMMON_FLAGS = ['ARCH=arm64', 'CROSS_COMPILE=aarch64-linux-gnu-', 'CC=clang', 'LD=ld.lld', 'AS=llvm-as', 'AR=llvm-ar', 'OBJDUMP=llvm-objdump', 'READELF=llvm-readelf', 'NM=llvm-nm', 'OBJCOPY=llvm-objcopy']
  
     # Check files
     if not check_file("AnyKernel3/version"):
