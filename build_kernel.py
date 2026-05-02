@@ -61,6 +61,27 @@ def zip_files(zipfilename: str, files: list[str]):
             zf.write(f)
     print("OK")
 
+
+def ensure_kernelsu_support():
+    repo_dir = 'KernelSU-Next'
+    setup_script = os.path.join(repo_dir, 'kernel', 'setup.sh')
+    if os.path.isdir('drivers/kernelsu') or os.path.islink('drivers/kernelsu'):
+        print('KernelSU support already configured.')
+        return
+
+    if not os.path.isdir(repo_dir):
+        print('Cloning KernelSU-Next repository...')
+        popen_impl(['git', 'clone', '--depth', '1', '--tags', 'https://github.com/KernelSU-Next/KernelSU-Next.git', repo_dir])
+    else:
+        print('KernelSU-Next repository already exists; updating...')
+        popen_impl(['git', '-C', repo_dir, 'pull', '--ff-only'])
+
+    if not os.path.exists(setup_script):
+        raise RuntimeError(f'KernelSU setup script not found: {setup_script}')
+
+    print('Configuring KernelSU-Next support in kernel tree...')
+    popen_impl(['bash', setup_script])
+
 class CompilerClang:
     @staticmethod
     def test_executable():
@@ -140,6 +161,9 @@ def main():
         config_fragments.append('arch/arm64/configs/vendor/ksu.config')
     if args.aosp:
         config_fragments.append('arch/arm64/configs/vendor/aosp.config')
+
+    if not args.no_ksu:
+        ensure_kernelsu_support()
     
     t = datetime.now()
     print('Make defconfig...')
